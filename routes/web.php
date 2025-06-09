@@ -3,9 +3,34 @@
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\WelcomeController;  
+
+Route::get('/order', [OrderController::class, 'index'])->name('order.index');        
+Route::get('/order/create', [OrderController::class, 'create'])->name('order.create');
+Route::post('/order', [OrderController::class, 'store'])->name('order.store');        
+Route::get('/order/edit/{id}', [OrderController::class, 'edit'])->name('order.edit');
+Route::put('/order/{id}', [OrderController::class, 'update'])->name('order.update');  
+Route::get('/order/{id}/images', [OrderController::class, 'images'])->name('order.images');
+
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+Route::post('/users', [UserController::class, 'store'])->name('users.store');
+Route::get('/users/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
+Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+
+Route::get('/item', [ItemController::class, 'index'])->name('item.index');         
+Route::get('/item/create', [ItemController::class, 'create'])->name('item.create'); 
+Route::post('/item/store', [ItemController::class, 'store'])->name('item.store');   
+Route::get('/item/edit/{id}', [ItemController::class, 'edit'])->name('item.edit');
+Route::put('/item/update/{id}', [ItemController::class, 'update'])->name('item.update');
+
+Route::post('/order/{orderId}/images', [OrderController::class, 'uploadImage'])->name('order.images.upload');
+Route::delete('/images/{imageId}', [OrderController::class, 'deleteImage'])->name('order.images.delete');
+
+Route::get('/', [WelcomeController::class, 'index']);
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -20,15 +45,15 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/noje', function () {
-    return view('welcome'); // la vista resources/views/welcome.blade.php
+    return view('welcome');
 });
 
 Route::get('/about', function () {
-    return view('about'); // crea este archivo blade para la página About
+    return view('about');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard'); // crea este archivo blade para la página About
+    return view('dashboard');
 });
 
 require __DIR__.'/auth.php';

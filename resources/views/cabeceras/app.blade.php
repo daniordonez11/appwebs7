@@ -49,8 +49,8 @@
         <ul>
             <li><a href="{{ url('/') }}">Inicio</a></li>
             <li><a href="{{ url('/order') }}">Ordenes</a></li>
-            <li><a href="{{ url('/services') }}">Inventario</a></li>
-            <li><a href="{{ url('/personal') }}">Personal</a></li>
+            <li><a href="{{ url('/item') }}">Inventario</a></li>
+            <li><a href="{{ url('/users') }}">Usuarios</a></li>
             <li><a href="{{ url('/about') }}">Acerca</a></li>
         </ul>
     </nav>
