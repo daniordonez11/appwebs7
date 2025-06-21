@@ -56,6 +56,16 @@
                             Editar
                         </a>
                     </td>
+                    <td class="px-5 py-3 text-center">
+        <form method="POST" action="{{ route('order.destroy', $order['id']) }}" onsubmit="return confirm('¿Seguro quieres borrar esta orden?');">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="text-red-600 hover:text-red-800 font-semibold hover:underline bg-transparent border-none cursor-pointer">
+                Borrar
+            </button>
+        </form>
+    </td>
+
                 </tr>
             @empty
                 <tr>

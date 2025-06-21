@@ -119,6 +119,28 @@
             <li><a href="{{ url('/item') }}">Inventario</a></li>
             <li><a href="{{ url('/users') }}">Usuarios</a></li>
             <li><a href="{{ url('/about') }}">Acerca</a></li>
+            li>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" 
+                    style="
+                        background: none;
+                        border: none;
+                        color: white;
+                        font-weight: 600;
+                        font-size: 1.1rem;
+                        padding: 10px 15px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        transition: background-color 0.3s, box-shadow 0.3s;
+                    "
+                    onmouseover="this.style.backgroundColor='#185601'; this.style.boxShadow='0 4px 10px rgba(24,86,1,0.6)';"
+                    onmouseout="this.style.backgroundColor=''; this.style.boxShadow='';"
+                >
+                    Cerrar Sesión
+                </button>
+            </form>
+        </li>
         </ul>
     </nav>
 

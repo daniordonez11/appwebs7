@@ -1,41 +1,27 @@
 @extends('cabeceras.app')
 
 @section('content')
-<h1 class="text-3xl font-bold text-center mb-6">Editar Orden</h1>
+<h1 class="text-3xl font-bold text-center mb-6">Editar Usuario</h1>
 
-<form action="{{ route('order.update', $orden['id']) }}" method="POST" class="max-w-xl mx-auto">
+<form action="{{ route('users.update', $user['id']) }}" method="POST" class="max-w-md mx-auto bg-white p-6 rounded shadow">
     @csrf
     @method('PUT')
 
-    <input name="nombreCliente" placeholder="Nombre del Cliente" class="input-field" 
-        value="{{ old('nombreCliente', $orden['nombreCliente']) }}" required>
-    
-    <input name="telefono" type="number" placeholder="Teléfono" class="input-field" 
-        value="{{ old('telefono', $orden['telefono']) }}" required>
-    
-    <input name="modeloPc" placeholder="Modelo PC" class="input-field" 
-        value="{{ old('modeloPc', $orden['modeloPc']) }}" required>
-    
-    <textarea name="descripcion" placeholder="Descripción" class="input-field" required>{{ old('descripcion', $orden['descripcion']) }}</textarea>
-    
-    <input name="accesorios" placeholder="Accesorios (opcional)" class="input-field" 
-        value="{{ old('accesorios', $orden['accesorios'] ?? '') }}">
-    
-    <select name="estado" class="input-field" required>
-        <option value="en proceso" {{ old('estado', $orden['estado']) == 'en proceso' ? 'selected' : '' }}>En Proceso</option>
-        <option value="finalizado" {{ old('estado', $orden['estado']) == 'finalizado' ? 'selected' : '' }}>Finalizado</option>
+    <label class="block mb-2">Nombre</label>
+    <input type="text" name="nombre" value="{{ old('nombre', $user['nombre']) }}" class="w-full border p-2 rounded mb-4" required>
+
+    <label class="block mb-2">Correo Electrónico</label>
+    <input type="email" name="email" value="{{ old('email', $user['email']) }}" class="w-full border p-2 rounded mb-4" required>
+
+    <label class="block mb-2">Contraseña (dejar en blanco para no cambiar)</label>
+    <input type="password" name="password" class="w-full border p-2 rounded mb-4">
+
+    <label class="block mb-2">¿Qué tipo de Usuario es?</label>
+    <select name="accesoTotal" class="w-full border p-2 rounded mb-4" required>
+        <option value="1" {{ old('accesoTotal', $user['accesoTotal']) == 1 ? 'selected' : '' }}>Empleado</option>
+        <option value="0" {{ old('accesoTotal', $user['accesoTotal']) == 0 ? 'selected' : '' }}>Cliente</option>
     </select>
 
-    <select name="usuarioId" class="input-field" required>
-        <option value="">Selecciona un Usuario</option>
-        @foreach($usuarios as $usuario)
-            <option value="{{ $usuario['id'] }}" 
-                {{ old('usuarioId', $orden['usuarioId']) == $usuario['id'] ? 'selected' : '' }}>
-                {{ $usuario['nombre'] ?? $usuario['name'] }}
-            </option>
-        @endforeach
-    </select>
-
-    <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Actualizar</button>
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Actualizar</button>
 </form>
 @endsection

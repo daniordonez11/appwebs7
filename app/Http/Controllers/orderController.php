@@ -160,4 +160,15 @@ public function uploadImage(Request $request, $orderId)
     }
 }
 
+public function destroy($id)
+{
+    $response = Http::delete($this->apiBase . '/' . $id);
+
+    if ($response->successful()) {
+        return redirect()->route('order.index')->with('success', 'Orden borrada correctamente');
+    } else {
+        return redirect()->route('order.index')->withErrors('Error al borrar la orden');
+    }
+}
+
 }

@@ -87,4 +87,15 @@ public function update(Request $request, $id)
     }
 }
 
+public function destroy($id)
+{
+    $response = \Illuminate\Support\Facades\Http::delete("http://localhost:3000/api/v1/auth/item/{$id}");
+
+    if ($response->successful()) {
+        return redirect()->route('item.index')->with('success', 'Item eliminado correctamente');
+    } else {
+        return redirect()->route('item.index')->withErrors('Error al eliminar el item');
+    }
+}
+
 }

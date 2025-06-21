@@ -82,4 +82,16 @@ public function update(Request $request, $id)
         ? redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente')
         : back()->withErrors('Error al actualizar el usuario')->withInput();
 }
+
+public function destroy($id)
+{
+    $response = Http::delete("http://localhost:3000/api/v1/auth/usuario/{$id}");
+
+    if ($response->successful()) {
+        return redirect()->route('users.index')->with('success', 'Usuario borrado correctamente');
+    } else {
+        return redirect()->route('users.index')->withErrors('Error al borrar el usuario');
+    }
+}
+
 }

@@ -1,28 +1,28 @@
 @extends('cabeceras.app')
 
 @section('content')
-    <h1 style="font-weigth: bold; font-size: 64px; text-align: center;">Inventario</h1>
+    <h1 style="font-weight: bold; font-size: 64px; text-align: center;">Inventario</h1>
 
     <a href="{{ route('item.create') }}" 
-   class="block mx-auto mb-6 bg-blue-600 text-white text-lg font-semibold px-6 py-3 rounded hover:bg-blue-700 text-center w-max">
-    + Nuevo Item
-</a>
+       class="block mx-auto mb-6 bg-blue-600 text-white text-lg font-semibold px-6 py-3 rounded hover:bg-blue-700 text-center w-max">
+        + Nuevo Item
+    </a>
 
     <div class="overflow-x-auto shadow-lg rounded-lg">
         <table id="tabla-inventario" class="min-w-full bg-white border border-green-300 ordenable">
             <thead class="bg-green-600 text-white cursor-pointer select-none">
                 <tr>
                     @php
-                        $headers = ['ID', 'Descripción', 'Cantidad', 'Observación', 'Acciones'];
+                        $headers = ['ID', 'Descripción', 'Cantidad', 'Observación', 'Editar', 'Borrar'];
                     @endphp
                     @foreach ($headers as $colIndex => $header)
                         <th
                             class="px-5 py-3 text-left uppercase font-semibold tracking-wider border-r border-green-500"
                             data-col="{{ $colIndex }}"
-                            @if($header === 'Acciones') style="cursor: default;" @endif
+                            @if(in_array($header, ['Editar', 'Borrar'])) style="cursor: default;" @endif
                         >
                             {{ $header }}
-                            @if($header !== 'Acciones')
+                            @if(!in_array($header, ['Editar', 'Borrar']))
                             <span class="sort-indicator ml-1 text-sm"></span>
                             @endif
                         </th>
@@ -31,20 +31,29 @@
             </thead>
             <tbody>
                 @forelse ($items as $item)
-                    <tr class="border-t border-green-200 hover:bg-green-50 transition-colors duration-200 cursor-pointer">
+                    <tr class="border-t border-green-200 hover:bg-green-50 transition-colors duration-200">
                         <td class="px-5 py-3 whitespace-nowrap border-r border-green-200 font-semibold">{{ $item['id'] ?? 'N/A' }}</td>
                         <td class="px-5 py-3 border-r border-green-200">{{ $item['descripcion'] }}</td>
                         <td class="px-5 py-3 border-r border-green-200">{{ $item['cantidad'] }}</td>
                         <td class="px-5 py-3 border-r border-green-200">{{ $item['observacion'] }}</td>
-                        <td class="px-5 py-3 text-center">
+                        <td class="px-5 py-3 text-center border-r border-green-200">
                             <a href="{{ route('item.edit', $item['id']) }}" class="text-green-700 hover:text-green-900 font-semibold hover:underline">
                                 Editar
                             </a>
                         </td>
+                        <td class="px-5 py-3 text-center">
+                            <form method="POST" action="{{ route('item.destroy', $item['id']) }}" onsubmit="return confirm('¿Seguro que quieres eliminar este item?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:text-red-800 font-semibold">
+                                    Borrar
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center py-6 text-green-700 font-semibold">No hay items en el inventario.</td>
+                        <td colspan="6" class="text-center py-6 text-green-700 font-semibold">No hay items en el inventario.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -70,8 +79,7 @@
         }
 
         thead.querySelectorAll('th').forEach(th => {
-            // Evitar ordenar la columna "Acciones"
-            if(th.textContent.trim() === 'Acciones') return;
+            if (['Editar', 'Borrar'].includes(th.textContent.trim())) return;
 
             th.addEventListener('click', () => {
                 const colIndex = parseInt(th.dataset.col);
@@ -82,12 +90,10 @@
                     colOrden = colIndex;
                 }
 
-                // Quitar indicadores de otras columnas
                 thead.querySelectorAll('th .sort-indicator').forEach(span => {
                     span.textContent = '';
                 });
 
-                // Poner indicador en la columna actual
                 th.querySelector('.sort-indicator').textContent = ordenAsc ? '▲' : '▼';
 
                 const filas = Array.from(tbody.querySelectorAll('tr'));
