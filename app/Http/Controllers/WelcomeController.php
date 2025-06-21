@@ -18,13 +18,12 @@ class WelcomeController extends Controller
             $orders = [];
         }
 
-        // Filtrar órdenes por estado
+        
         $recienLlegadas = array_filter($orders, fn($order) => ($order['estado'] ?? '') === 'Recien llegada');
         $enProceso = array_filter($orders, fn($order) => ($order['estado'] ?? '') === 'En proceso');
         $recientementeEntregado = array_filter($orders, fn($order) => ($order['estado'] ?? '') === 'Recientemente entregado');
-        $otrosEstados = array_filter($orders, fn($order) => !in_array(($order['estado'] ?? ''), ['Recien llegada', 'En proceso', 'Recientemente entregado']));
+        $otrosEstados = array_filter($orders, fn($order) => ($order['estado'] ?? '') === 'Listo para entrega');
 
-        // Pasar a la vista
         return view('welcome', compact('recienLlegadas', 'enProceso', 'recientementeEntregado', 'otrosEstados'));
     }
 }
